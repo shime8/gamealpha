@@ -1,5 +1,8 @@
 package main;
 
+import Map.GridLayer;
+import entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,7 +12,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int originalTileSize = 16; // 16x16 płytki
     final int scale = 4;
 
-    final int tileSize = originalTileSize * scale; //64x64
+    public final int tileSize = originalTileSize * scale; //64x64
     final int maxScreenCol = 16;
     final int maxScreenRow = 12;
     final int screenWidth = tileSize * maxScreenCol; // 1024
@@ -19,11 +22,9 @@ public class GamePanel extends JPanel implements Runnable{
     int FPS = 60;
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+    Player player = new Player(this, keyH);
+    GridLayer gridLayer = new GridLayer(4,4);
 
-    //set players default position
-    int playerX = 100;
-    int playerY = 100;
-    int playerspeed = 4;
 
 
     public GamePanel(){
@@ -41,33 +42,7 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread.start();
     }
 
-//    @Override
-//    public void run() {
-//
-//        double drawInterval = (double) 1000000000 /FPS;
-//        double nextDrawTime = System.nanoTime() + drawInterval;
-//
-//        while(gameThread != null){
-//
-//            // 1.update
-//            update();
-//            // 2. draw on screen
-//            repaint();
-//
-//
-//            try {
-//                double remainingTime = nextDrawTime - System.nanoTime();
-//                remainingTime = remainingTime/1000000;
-//                if(remainingTime < 0){
-//                    remainingTime = 0;
-//                }
-//                Thread.sleep((long)remainingTime);
-//                nextDrawTime += drawInterval;
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+
 @Override
 public void run() {
 
@@ -77,6 +52,8 @@ public void run() {
     long currentTime;
     long timer = 0;
     long drawCount = 0;
+
+    initialize();
 
     while(gameThread != null){
 
@@ -95,18 +72,18 @@ public void run() {
             drawCount++;
         }
         if(timer>= 1000000000){
-            System.out.println("FPS:"+drawCount);
+            if(drawCount<50){System.out.println("LOW FPS:"+drawCount);}
             drawCount = 0;
             timer = 0;
         }
     }
 }
+    public void initialize(){
+        gridLayer.randomize();
+    }
 
     public void update(){
-        playerY -= keyH.upPressed ? playerspeed : 0;
-        playerY += keyH.downPressed ? playerspeed : 0;
-        playerX -= keyH.leftPressed ? playerspeed : 0;
-        playerX += keyH.rightPressed ? playerspeed : 0;
+        player.update();
     }
 
     public void paintComponent(Graphics g){
@@ -115,9 +92,8 @@ public void run() {
 
         Graphics2D g2 = (Graphics2D)g;
 
-        g2.setColor(Color.white);
-
-        g2.fillRect(playerX,playerY,tileSize, tileSize);
+        gridLayer.draw(g2, player.ScreenX-player.EngineX, player.ScreenY-player.EngineY, tileSize);
+        player.draw(g2);
 
         g2.dispose();
     }
