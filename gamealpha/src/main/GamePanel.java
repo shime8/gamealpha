@@ -29,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable{
     Thread gameThread;
     public Player player = new Player(this,keyH);
     TileManager tileM = new TileManager(this);
-
+    public CollisionChecker cChecker = new CollisionChecker(this);
 
     public GamePanel(){
 
@@ -92,6 +92,7 @@ public void run() {
 
         tileM.draw(g2);
         player.draw(g2);
+        player.drawHitbox(g2);
 
         g2.dispose();
     }
