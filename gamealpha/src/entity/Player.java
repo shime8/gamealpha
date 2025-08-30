@@ -31,23 +31,29 @@ public class Player extends Entity{
         worldX = gp.tileSize*22;
         worldY = gp.tileSize*22;
         speed = 6;
-        direction ="down";
+        direction.x = 0;
+        direction.y = 0;
     }
     public void update(){
 
         // kierunek
+        direction.x = 0;
+        direction.y = 0;
         if(keyH.upPressed){
-            direction = "up";
+            direction.y -= 1.0;
         }
         if(keyH.downPressed){
-            direction = "down";
+            direction.y += 1.0;
         }
         if(keyH.leftPressed){
-            direction = "left";
+            direction.x -= 1.0;
         }
         if(keyH.rightPressed){
-            direction = "right";
+            direction.x += 1.0;
         }
+        direction.setLengthOne();
+        updateSteps();
+
 
         // sprawdzenie kolizji
         collisionYOn = false;
@@ -55,14 +61,12 @@ public class Player extends Entity{
         gp.cChecker.checkTile(this);
 
         //ruch gracza
-        if(!collisionXOn){switch (direction){
-            case "left":    if(keyH.leftPressed)worldX -= speed;break;
-            case "right":   if(keyH.rightPressed)worldX += speed;break;
-        }}
-        if(!collisionYOn){switch(direction){
-            case "up":      if(keyH.upPressed)worldY -= speed;break;
-            case "down":    if(keyH.downPressed)worldY += speed;break;
-        }}
+        if(!collisionXOn){
+            worldX += stepX;
+        }
+        if(!collisionYOn){
+            worldY += stepY;
+        }
     }
     public void draw(Graphics2D g2){
         g2.setColor(Color.white);
