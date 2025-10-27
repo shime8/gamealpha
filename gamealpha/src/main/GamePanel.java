@@ -1,5 +1,6 @@
 package main;
 
+import UI.BaseUI;
 import entity.Player;
 import tile.TileManager;
 
@@ -30,6 +31,8 @@ public class GamePanel extends JPanel implements Runnable{
     public Player player = new Player(this,keyH);
     TileManager tileM = new TileManager(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
+
+    BaseUI inventory = new BaseUI( this, keyH, new Rectangle(screenWidth/4, screenHeight/4, screenWidth/2, screenHeight/2), Color.darkGray);
 
     public GamePanel(){
 
@@ -69,7 +72,7 @@ public void run() {
             update();
             // 2. draw on screen
             repaint();
-            delta --;
+            delta--;
             drawCount++;
         }
         if(timer>= 1000000000){
@@ -93,7 +96,7 @@ public void run() {
         tileM.draw(g2);
         player.draw(g2);
         player.drawHitbox(g2);
-
+        if(keyH.ePressed){inventory.draw(g2);}
         g2.dispose();
     }
 }
