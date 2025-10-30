@@ -58,8 +58,8 @@ public class Player extends Entity{
         // sprawdzenie kolizji
         collisionYOn = false;
         collisionXOn = false;
-        gp.cChecker.checkTile(this, 0);
-        gp.cChecker.checkTile(this, 1);
+        gp.cChecker.checkTile(this);
+
 
         //ruch gracza
         if(!collisionXOn){
