@@ -2,6 +2,8 @@ package main;
 
 import UI.BaseUI;
 import entity.Player;
+import tile.AssetSetter;
+import tile.TileEntity;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -31,7 +33,8 @@ public class GamePanel extends JPanel implements Runnable{
     public Player player = new Player(this,keyH);
     TileManager tileM = new TileManager(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
-
+    public AssetSetter aSetter = new AssetSetter(this);
+    public TileEntity[] te = new TileEntity[100];
     BaseUI inventory = new BaseUI( this, keyH, new Rectangle(screenWidth/4, screenHeight/4, screenWidth/2, screenHeight/2), Color.darkGray);
 
     public GamePanel(){
@@ -42,7 +45,9 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(keyH);
         this.setFocusable(true);
     }
-
+    public void setupGame(){
+        aSetter.setTileEntity();
+    }
     public void startGameThread(){
 
         gameThread = new Thread(this);
@@ -93,8 +98,18 @@ public void run() {
 
         Graphics2D g2 = (Graphics2D)g;
 
+        //tile
         tileM.draw(g2);
+        //tileEntity
+        for (int i=0; i<te.length; i++){
+            if(te[i] !=null){
+                te[i].draw(g2,this);
+            }
+        }
+
+        //player
         player.draw(g2);
+
         player.drawHitbox(g2);
         if(keyH.ePressed){inventory.draw(g2);}
         g2.dispose();
