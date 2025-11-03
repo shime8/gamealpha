@@ -27,7 +27,7 @@ public class TileEntityManager {
         boolean exists = false;
 
         for (TileEntity t : teList) {
-            if (t.worldX == te.worldX && t.worldY == te.worldY) {
+            if (t.gridX == te.gridX && t.gridY == te.gridY) {
                 exists = true;
                 break;
             }
@@ -35,6 +35,20 @@ public class TileEntityManager {
 
         if (!exists) {
             teList.add(te);
+        }
+    }
+    public void destroyTile(int gridX, int gridY){
+        boolean exists = false;
+        TileEntity temp = null;
+        for (TileEntity t : teList) {
+            if (t.gridX == gridX && t.gridY == gridY) {
+                exists = true;
+                temp = t;
+                break;
+            }
+        }
+        if (exists) {
+            teList.remove(temp);
         }
     }
 }
