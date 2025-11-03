@@ -8,6 +8,7 @@ import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -29,12 +30,13 @@ public class GamePanel extends JPanel implements Runnable{
     // FPS
     int FPS = 60;
     KeyHandler keyH = new KeyHandler();
+    MouseHandler mouseH = new MouseHandler(this);
     Thread gameThread;
     public Player player = new Player(this,keyH);
     TileManager tileM = new TileManager(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
-    public TileEntity[] te = new TileEntity[100];
+    public ArrayList<TileEntity> te = new ArrayList<>();
     BaseUI inventory = new BaseUI( this, keyH, new Rectangle(screenWidth/4, screenHeight/4, screenWidth/2, screenHeight/2), Color.darkGray);
 
     public GamePanel(){
@@ -43,6 +45,8 @@ public class GamePanel extends JPanel implements Runnable{
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
+        this.addMouseListener(mouseH);
+        this.addMouseMotionListener(mouseH);
         this.setFocusable(true);
     }
     public void setupGame(){
@@ -88,7 +92,9 @@ public void run() {
     }
 }
     public void update(){
+
         player.update();
+        mouseH.update();
     }
 
 
@@ -101,12 +107,13 @@ public void run() {
         //tile
         tileM.draw(g2);
         //tileEntity
-        for (int i=0; i<te.length; i++){
-            if(te[i] !=null){
-                te[i].draw(g2,this);
+        for (TileEntity t : te){
+            if(t !=null){
+                t.draw(g2,this);
             }
         }
-
+        //mouseActions
+        mouseH.draw(g2);
         //player
         player.draw(g2);
 
