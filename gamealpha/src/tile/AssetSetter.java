@@ -8,10 +8,9 @@ public class AssetSetter {
         this.gp = gp;
     }
     public void setTileEntity(){
-        TileEntity TEmp = new Chest();
-        TEmp.worldX =  7 * gp.tileSize;
-        TEmp.worldY =  7 * gp.tileSize;
-        gp.te.add(TEmp);
-
+        TileEntity TEmp = new Chest(gp);
+        TEmp.worldX = 7* gp.tileSize;
+        TEmp.worldY = 7* gp.tileSize;
+        gp.tileEntityM.teList.add(TEmp);
     }
 }

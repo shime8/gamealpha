@@ -17,6 +17,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
     int MscreenX, MscreenY, MworldX, MworldY, MscreenGridX, MscreenGridY, MworldGridX, MworldGridY;
     BufferedImage image = null;
     GamePanel gp;
+    TileEntity TEmp = null;
     public MouseHandler(GamePanel gp){
         this.gp = gp;
         try{
@@ -33,10 +34,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 
         }
 
-        TileEntity TEmp = new Chest();
-        TEmp.worldX = this.MworldGridX;
-        TEmp.worldY = this.MworldGridY;
-        gp.te.add(TEmp);
+        TEmp = new Chest(gp);
 
     }
     @Override
@@ -65,6 +63,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
     @Override
     public void mouseDragged(MouseEvent e) {
         mouseMoved(e);
+        mouseClicked(e);
     }
     public void update(){
         MworldX = MscreenX + gp.player.worldX - gp.player.screenX;
@@ -73,6 +72,12 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
         MworldGridY = MworldY- MworldY%gp.tileSize;
         MscreenGridX = MworldGridX - gp.player.worldX + gp.player.screenX;
         MscreenGridY = MworldGridY - gp.player.worldY + gp.player.screenY;
+        if(TEmp != null){
+            TEmp.worldX = this.MworldGridX;
+            TEmp.worldY = this.MworldGridY;
+            gp.tileEntityM.addTile(TEmp);
+            TEmp = null;
+        }
     }
     public void draw(Graphics2D g2){
 

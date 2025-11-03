@@ -15,7 +15,7 @@ public class TileManager {
     GamePanel gp;
     public Tile[] tile;
     public int[][] mapTileNum;
-    int layernum = 2;
+
 
     public TileManager(GamePanel gp) {
 
@@ -88,7 +88,6 @@ public class TileManager {
 
 
     public void draw(Graphics2D g2){
-        for (int l=0; l < this.layernum; l++) {
             int worldCol = 0;
             int worldRow = 0;
 
@@ -107,14 +106,10 @@ public class TileManager {
                         g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
                     }
                 worldCol++;
-
                 if (worldCol == gp.maxWorldCol) {
                     worldCol = 0;
-
                     worldRow++;
-
                 }
             }
-        }
     }
 }

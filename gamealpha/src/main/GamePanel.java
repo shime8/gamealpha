@@ -4,6 +4,7 @@ import UI.BaseUI;
 import entity.Player;
 import tile.AssetSetter;
 import tile.TileEntity;
+import tile.TileEntityManager;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -33,10 +34,10 @@ public class GamePanel extends JPanel implements Runnable{
     MouseHandler mouseH = new MouseHandler(this);
     Thread gameThread;
     public Player player = new Player(this,keyH);
-    TileManager tileM = new TileManager(this);
+    public TileManager tileM = new TileManager(this);
+    public TileEntityManager tileEntityM = new TileEntityManager(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
-    public ArrayList<TileEntity> te = new ArrayList<>();
     BaseUI inventory = new BaseUI( this, keyH, new Rectangle(screenWidth/4, screenHeight/4, screenWidth/2, screenHeight/2), Color.darkGray);
 
     public GamePanel(){
@@ -107,11 +108,7 @@ public void run() {
         //tile
         tileM.draw(g2);
         //tileEntity
-        for (TileEntity t : te){
-            if(t !=null){
-                t.draw(g2,this);
-            }
-        }
+        tileEntityM.draw(g2);
         //mouseActions
         mouseH.draw(g2);
         //player
