@@ -1,10 +1,13 @@
 package entity;
 
+import main.GamePanel;
 import main.Vector2D;
 
 import java.awt.*;
 
 public class Entity {
+    GamePanel gp;
+
     public int worldX, worldY;
     public int screenX, screenY;
     public int speed;

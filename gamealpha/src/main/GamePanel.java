@@ -1,15 +1,20 @@
 package main;
 
 import UI.BaseUI;
+import UI.InventoryUI;
 import entity.Player;
+import items.Item;
 import tile.AssetSetter;
 import tile.TileEntity;
 import tile.TileEntityManager;
 import tile.TileManager;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -38,7 +43,8 @@ public class GamePanel extends JPanel implements Runnable{
     public TileEntityManager tileEntityM = new TileEntityManager(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
-    BaseUI inventory = new BaseUI( this, keyH, new Rectangle(screenWidth/4, screenHeight/4, screenWidth/2, screenHeight/2), Color.darkGray);
+    InventoryUI inventoryUI = new InventoryUI( this, keyH, new Rectangle(screenWidth/4, screenHeight/4, screenWidth/2, screenHeight/2), Color.darkGray, 5);
+
 
     public GamePanel(){
 
@@ -53,6 +59,13 @@ public class GamePanel extends JPanel implements Runnable{
     }
     public void setupGame(){
         aSetter.setTileEntity();
+
+        try{
+            BufferedImage temp1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/chest.png")));
+            inventoryUI.PlayerInventory.ItemList[0] = new Item(temp1, 1);
+            inventoryUI.PlayerInventory.ItemList[1] = new Item(temp1, 1);
+            inventoryUI.PlayerInventory.ItemList[2] = new Item(temp1, 1);
+        }catch(Exception ignored){}
     }
     public void startGameThread(){
 
@@ -116,7 +129,7 @@ public void run() {
         player.draw(g2);
 
         player.drawHitbox(g2);
-        if(keyH.ePressed){inventory.draw(g2);}
+        if(keyH.ePressed){inventoryUI.draw(g2);}
         g2.dispose();
     }
 }
